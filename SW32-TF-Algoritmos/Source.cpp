@@ -1,8 +1,10 @@
 #include<iostream>
 #include<ctime>
+#include<filesystem>
 #include "arbolAVL.h"
 #include<Windows.h>
 using namespace std;
+using namespace std::experimental::filesystem;
 
 void imprimir(int e) {
 	cout << " " << e;
@@ -10,6 +12,10 @@ void imprimir(int e) {
 
 ///------
 int main() {
+	string path = "C:\\Users\\Aldo\\Documents\\Especificación y Análisis de Requerimientos";
+	for (const auto & entry : recursive_directory_iterator(path)) {
+		cout << entry.path() << endl;
+	}
 	srand(time_t(NULL));
 	//--
 	ArbolAVL<int>* tree;
@@ -29,4 +35,5 @@ int main() {
 	tree->inOrder();
 	cout << "\n";
 	system("pause");
+	return 0;
 }

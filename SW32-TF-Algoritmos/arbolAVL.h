@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "NodoAVL.h"
 
 template<class T>
@@ -25,9 +24,9 @@ private:
 		else if (e < nodo->key) {
 			_insertar(nodo->left, e);
 		}
-		else if (e > nodo->key) {
+		else if (e >= nodo->key) {
 			_insertar(nodo->right, e);
-		}
+		} 
 		//===============================================================
 		//INI_DE_BALANCEO
 		int hi = _altura(nodo->left);
