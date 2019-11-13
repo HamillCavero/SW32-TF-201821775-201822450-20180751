@@ -25,7 +25,7 @@ int main() {
 		cout << entry.path() << endl ;
 		cout << path(entry.path()).filename() << endl;
 		cout << file_size(entry.path()) << endl;
-		cout << path(entry.path()).extension() << endl;
+		cout << path(entry.path()).extension() << endl; 
 		
 	}
 
