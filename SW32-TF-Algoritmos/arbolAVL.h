@@ -2,7 +2,8 @@
 #include "NodoAVL.h"
 
 template<class T>
-class ArbolAVL {
+class ArbolAVL 
+{
 private:
 	Node<T>* raiz;
 	void(*procesar)(T);
