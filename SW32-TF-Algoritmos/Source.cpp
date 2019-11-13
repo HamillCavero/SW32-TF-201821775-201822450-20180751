@@ -1,21 +1,39 @@
 #include<iostream>
 #include<ctime>
 #include<filesystem>
+#include <chrono>
+#include <iomanip>
 #include "arbolAVL.h"
 #include<Windows.h>
 using namespace std;
 using namespace std::experimental::filesystem;
-
+using namespace std::chrono_literals;
 void imprimir(int e) {
 	cout << " " << e;
 }
 
 ///------
 int main() {
-	string path = "C:\\Users\\Aldo\\Documents\\Especificación y Análisis de Requerimientos";
-	for (const auto & entry : recursive_directory_iterator(path)) {
-		cout << entry.path() << endl;
+	//string path = "C:\\Users\\Aldo\\Documents\\Especificación y Análisis de Requerimientos";
+	
+	
+
+	string path1 = "E:\\felicidad";  // . es la careta del programa // investigar c++files system
+	
+
+	for (const auto & entry : directory_iterator(path1)) {
+		cout << entry.path() << endl ;
+		cout << path(entry.path()).filename() << endl;
+		cout << file_size(entry.path()) << endl;
+		cout << path(entry.path()).extension() << endl;
+		
 	}
+
+	/* path1 = "E:\\New folder\\asdfghj.txt";
+	for (const auto & entry : recursive_directory_iterator(path1)) {
+		cout << entry.path() << endl;
+	}*/
+
 	srand(time_t(NULL));
 	//--
 	ArbolAVL<int>* tree;
