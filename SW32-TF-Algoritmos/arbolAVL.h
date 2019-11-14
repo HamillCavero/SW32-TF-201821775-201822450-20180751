@@ -78,12 +78,14 @@ private:
 		_inOrder(nodo->right);
 	}
 public:
-	ArbolAVL(void(*pf)(T)) {
+	ArbolAVL(void(*pf)(T))
+	{
 		this->procesar = pf;
 		raiz = nullptr;
 	}
 	//----
-	void insertar(T e) {
+	void insertar(T e) 
+	{
 		_insertar(raiz, e);
 	}
 	//---
