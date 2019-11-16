@@ -31,8 +31,10 @@ int main() {
 	tree = new ArbolAVL<int>(imprimir);
 	ArbolAVL<string>* arbolito;
 	ArbolAVL<string>* file;
+	ArbolAVL<string>* fecha;
 	file = new ArbolAVL<string>(imprime);
 	arbolito = new ArbolAVL<string>(imprime);
+	fecha = new ArbolAVL<string>(imprime);
 	auto ftime = last_write_time("C:\\Users\\Aldo\\Pictures\\Saved Pictures");
 
 	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
@@ -40,6 +42,7 @@ int main() {
 	string path1 = "C:\\Users\\Aldo\\Pictures\\Saved Pictures";  // . es la careta del programa // investigar c++files system
 	string path2 = "C:\\Users\\Aldo\\Pictures\\Saved Pictures";
 	string path3 = "C:\\Users\\Aldo\\Pictures\\Saved Pictures";
+	string path4 = "C:\\Users\\Aldo\\Pictures\\Saved Pictures";
 
 	for (const auto & entry : directory_iterator(path1)) {
 		cout << entry.path() << endl;
@@ -51,10 +54,13 @@ int main() {
 		cftime = decltype(ftime)::clock::to_time_t(ftime);
 		path2 = path(entry.path().filename()).u8string();
 		path3= path(entry.path().extension()).u8string();
+		path4 = asctime(localtime(&cftime));
 		cout << "File write time is " << asctime(localtime(&cftime));
 		sizefile->insertar(file_size(entry.path()));
 		file->insertar(path2);
 		arbolito->insertar(path3);
+		fecha->insertar(path4);
+
 	}
 
 
@@ -81,6 +87,8 @@ int main() {
 	file->inOrder();
 	cout << "\n";
 	arbolito->inOrder();
+	cout << "\n";
+	fecha->inOrder();
 	cout << "\n";
 	system("pause");
 #ifdef _MSC_VER
