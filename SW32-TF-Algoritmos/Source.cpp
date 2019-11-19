@@ -21,7 +21,8 @@ void imprime(string p)
 {
 	cout << " , " << p;
 }
-class Libreta {
+class Libreta 
+{
 	string name;
 	int size;
 	string extension; // good reads
