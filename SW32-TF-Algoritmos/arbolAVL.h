@@ -1,95 +1,179 @@
 #pragma once
-#include "NodoAVL.h"
+#include <functional>
 
-template<class T>
-class ArbolAVL 
-{
-private:
-	Node<T>* raiz;
+#define max(a, b) ( a > b? a : b )
+
+using namespace std;
+
+template <typename T, typename Comparable = T, T NONE = 0>
+class AVLTree {
+	struct Node {
+		T elem;
+		int   h;//altura
+		int   n;
+		Node* left;
+		Node* right;
+
+		Node(T elem)
+			: elem(elem), left(nullptr), right(nullptr), h(0), n(1) {}
+	};
+
+	Node* root;
+	int len;
+	function<Comparable(T)> key;
 	void(*procesar)(T);
-	//---
-	int max(int a, int b) {
-		return (a > b ? a : b);
-	}
-	//---
-	int _altura(Node<T>* nodo) {
-		if (nodo == nullptr) return -1;
-		return nodo->height;
-	}
-	//---
-	bool _insertar(Node<T>*& nodo, T e) {
-		if (nodo == nullptr) {
-			nodo = new Node<T>();
-			nodo->key = e;
+	void destroy(Node* node)
+	{
+		if (node != nullptr) {
+			destroy(node->left);
+			destroy(node->right);
+			delete node;
 		}
-		else if (e < nodo->key) {
-			_insertar(nodo->left, e);
+	}
+	Node* add(Node* node, T elem)
+	{
+		if (node == nullptr) {
+			node = new Node(elem);
 		}
-		else if (e >= nodo->key) {
-			_insertar(nodo->right, e);
-		} 
-		//===============================================================
-		//INI_DE_BALANCEO
-		int hi = _altura(nodo->left);
-		int hd = _altura(nodo->right);
-		int d = hd - hi;
-		if (d > 1) {//pesado a la derecha
-			int hni = _altura(nodo->right->left);
-			int hnd = _altura(nodo->right->right);
-			if (hni > hnd) { //zig zag derecha izquierda
-				_rotarDer(nodo->right->left, nodo->right, nodo->right);
+		else {
+			if (key(elem) < key(node->elem)) {
+				node->left = add(node->left, elem);
 			}
-			_rotarIzq(nodo, nodo->right, nodo);
-		}
-		else if (d < -1) { //pesado a la izquierda
-			int hni = _altura(nodo->left->left);
-			int hnd = _altura(nodo->left->right);
-			if (hnd > hni) {//zig zag derecha izquierda
-				_rotarIzq(nodo->left, nodo->left->right, nodo->left);
+			else {
+				node->right = add(node->right, elem);
 			}
-			_rotarDer(nodo->left, nodo, nodo);
+			node = balance(node);
 		}
-		//FIN_DE_BALANCEO
-		//===============================================================
-		hi = _altura(nodo->left);
-		hd = _altura(nodo->right);
-		nodo->height = 1 + ((hi > hd) ? hi : hd);
-		return true;
+		return node;
 	}
-	//---
-	//p is paren of x
-	void _rotarDer(Node<T>*& x, Node<T>* y, Node<T>*& p) {
-		p = x;
-		y->left = x->right;
-		p->right = y;
+	T find(Node* node, Comparable val) {
+		if (node == nullptr) {
+			return NONE;
+		}
+		else if (val == key(node->elem)) {
+			return node->elem;
+		}
+		else if (val < key(node->elem)) {
+			return find(node->left, val);
+		}
+		else {
+			return find(node->right, val);
+		}
 	}
-	//---
-	//p is paren of x
-	void _rotarIzq(Node<T>* x, Node<T>*& y, Node<T>*& p) {
-		p = y;
-		x->right = y->left;
-		p->left = x;
+
+	void inorder(Node* node, function<void(T)> proc) {
+		if (node != nullptr) {
+			inorder(node->left, proc);
+			proc(node->elem);
+			inorder(node->right, proc);
+		}
 	}
-	//---
-	void _inOrder(Node<T>* nodo) {
-		if (nodo == nullptr) return;
-		_inOrder(nodo->left);
-		procesar(nodo->key);
-		_inOrder(nodo->right);
+
+
+	// BALANCEO!
+	int height(Node* node) { return node == nullptr ? -1 : node->h; }
+	int length(Node* node) { return node == nullptr ? 0 : node->n; }
+	void update(Node* node)
+	{
+		node->h = 1 + max(height(node->left), height(node->right));
+		node->n = 1 + length(node->left) + length(node->right);
+	}
+	Node* rotLeft(Node* node) {
+		Node* aux = node->right;
+		node->right = aux->left;
+		aux->left = node;
+		update(aux->left);
+		update(aux);
+		return aux;
+	}
+	Node* rotRight(Node* node) {
+		Node* aux = node->left;
+		node->left = aux->right;
+		aux->right = node;
+		update(aux->right);
+		update(aux);
+		return aux;
+	}
+	Node* balance(Node* node) {
+		int hl = height(node->left);
+		int hr = height(node->right);
+		if (hl - hr > 1) {
+			if (height(node->left->right) > height(node->left->left))
+			{
+				node->left = rotLeft(node->left);
+			}
+			node = rotRight(node);
+		}
+		else if (hl - hr < -1) {
+			if (height(node->right->left) > height(node->right->right)) {
+				node->right = rotRight(node->right);
+			}
+			node = rotLeft(node);
+		}
+		else {
+			update(node);
+		}
+		return node;
 	}
 public:
-	ArbolAVL(void(*pf)(T))
+	AVLTree(function<Comparable(T)> key = [](T a) {return a; })
+		: root(nullptr), len(0), key(key) {}
+	~AVLTree() {
+		destroy(root);
+	}
+	int size() {
+		return len;
+	}
+	void add(T elem) {
+		root = add(root, elem);
+	}
+	bool remove(Comparable val)
 	{
-		this->procesar = pf;
-		raiz = nullptr;
+		// Encontrar el nodo con elemento a eliminar
+		Node* aux = root;
+		Node* parent;
+		bool left;
+		while (aux != nullptr) {
+			if (val == key(aux->elem)) break;
+			parent = aux;
+			if (val < key(aux->elem)) {
+				left = true;
+				aux = aux->left;
+			}
+			else {
+				left = false;
+				aux = aux->right;
+			}
+		}
+		if (aux == nullptr) return false;
+		if (aux->left == nullptr) {
+			if (aux == root) root = aux->right;
+			else if (left)   parent->left = aux->right;
+			else             parent->right = aux->right;
+			delete aux;
+		}
+		else {
+			Node* aux2 = aux->left;
+			while (aux2->right != nullptr) {
+				parent = aux2;
+				aux2 = aux2->right;
+			}
+			if (aux2 == aux->left) aux->left = aux2->left;
+			else                   parent->right = aux2->left;
+			aux->elem = aux2->elem;
+			delete aux2;
+		}
+		return true;
 	}
-	//----
-	void insertar(T e) 
+	T find(Comparable val)
 	{
-		_insertar(raiz, e);
+		return find(root, val);
 	}
-	//---
-	void inOrder() {
-		_inOrder(raiz);
+
+	// meh
+	void inorder(function<void(T)> proc)
+	{
+		inorder(root, proc);
 	}
+
 };
