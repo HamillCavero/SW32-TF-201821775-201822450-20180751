@@ -28,7 +28,7 @@ public:
 	/*Book(string name,string nameInv ,int year, string score, string timeupdate)
 		: name(name),nameInv(nameInv), size(year), extension(score), timeupdate(timeupdate) {}*/
 	Book(string name,string nameFirst, string nameInv, int year, string score, string timeupdate)
-		: name(name), nameInv(nameInv), size(year), extension(score), timeupdate(timeupdate) {}
+		: name(name),nameFirst(nameFirst), nameInv(nameInv), size(year), extension(score), timeupdate(timeupdate) {}
 
 	string getName() { return name; }
 	string getNameFirst() { return nameFirst; }
