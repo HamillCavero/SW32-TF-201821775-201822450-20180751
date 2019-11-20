@@ -61,13 +61,13 @@ int main() {
 	TreeFlt* extensionTree = new TreeFlt(l3);
 	TreeUpdate* time = new TreeUpdate(l4);
 
-	auto ftime = last_write_time("C:\\Users\\USER\\Desktop\\FISICA LABORATORIO");
+	auto ftime = last_write_time("C:\\Users\\Aldo\\Desktop\\Carpetade Prueba");
 	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
 
 	uintmax_t valorpeso;
-	string path1 = "C:\\Users\\USER\\Desktop\\FISICA LABORATORIO";  // . es la careta del programa // investigar c++files system
-	string path2 = "C:\\Users\\USER\\Desktop\\FISICA LABORATORIO";
-	string path3 = "C:\\Users\\USER\\Desktop\\FISICA LABORATORIO";
+	string path1 = "C:\\Users\\Aldo\\Desktop\\Carpetade Prueba";  // . es la careta del programa // investigar c++files system
+	string path2 = "C:\\Users\\Aldo\\Desktop\\Carpetade Prueba";
+	string path3 = "C:\\Users\\Aldo\\Desktop\\Carpetade Prueba";
 	
 	for (const auto & entry : directory_iterator(path1)) {
 		//cout << entry.path() << endl;
