@@ -73,14 +73,8 @@ void llenararbol2(string ruta, string path2, string nameFirst, string path3, str
 			ftime = last_write_time(entry.path());
 
 			cftime = decltype(ftime)::clock::to_time_t(ftime);
-			/*path2 = entry.path().stem().string()*/
-
+	
 			path2 = entry.path().filename().string();
-			/*string auxname;
-			istringstream iss(entry.path().filename().string());
-			getline(iss, auxname, '.');
-			path2 = auxname;*/
-			
 			path3 = entry.path().extension().string();
 			valorpeso = file_size(entry.path());
 			path4 = path2;
@@ -98,7 +92,7 @@ void llenararbol2(string ruta, string path2, string nameFirst, string path3, str
 		}
 	}
 }
-
+//cout << "\n";
 int main()
 {
 #ifdef _MSC_VER
@@ -111,7 +105,6 @@ int main()
 	int selección = 0;
 	int valor = 0;
 	string ruta = "";
-	/*string str = "kkdeprro";*/
 	string reversename = "";
 	string letrabuscar = "";
 	string nombrebuscar = "";
@@ -131,7 +124,7 @@ int main()
 	TreeFlt* extensionTree = new TreeFlt(l3);
 	TreeUpdate* time = new TreeUpdate(l4);
 
-	string path1 = "";  // . es la careta del programa // investigar c++files system
+	string path1 = "";  
 	string path2 = "";
 	string path3 = "";
 	string path4 = "";

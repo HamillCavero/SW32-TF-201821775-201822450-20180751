@@ -203,7 +203,6 @@ public:
 		return find(root, val);
 	}
 
-	// meh
 	void inorder(function<void(T)> proc)
 	{
 		inorder(root, proc);
