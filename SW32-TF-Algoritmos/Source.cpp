@@ -92,8 +92,8 @@ int main()
 
 		cftime = decltype(ftime)::clock::to_time_t(ftime);
 
-		path2 = /*path(entry.path().filename()).u8string();*/entry.path().filename().string();
-		path3 = /*path(entry.path().extension().string()).u8string();*/entry.path().filename().string();
+		path2 = /*path(entry.path().filename()).u8string();*/entry.path().stem().string();
+		path3 = /*path(entry.path().extension().string()).u8string();*/entry.path().extension().string();
 		valorpeso = file_size(entry.path());
 		Book* name = new Book(path2, valorpeso, path3, asctime(localtime(&cftime)));
 		nameTree->add(name);
