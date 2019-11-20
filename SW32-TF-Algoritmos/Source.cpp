@@ -40,9 +40,9 @@ void opciones(int &opc)
 	cout << "Seleccione (2) para ver todos los archivos encontrados" << endl;
 	cout << "Seleccione (3) para buscar por peso" << endl;
 	cout << "Seleccione (8) para salir." << endl;
-
 	cin >> opc;
 }
+
 
 int main()
 {
@@ -53,6 +53,7 @@ int main()
 #endif
 	int opc=0;
 	string ruta="";
+	string ruta2 = "";
 	float pesoarchivo=0.0;
 	Menu(opc);
 	typedef AVLTree<Book*, string, nullptr> TreeStr;
@@ -81,6 +82,7 @@ int main()
 		system("cls");
 		opciones(opc);
 	}
+
 	uintmax_t valorpeso;
 	auto ftime = last_write_time(ruta);
 	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
@@ -90,10 +92,8 @@ int main()
 
 		cftime = decltype(ftime)::clock::to_time_t(ftime);
 
-		path2 = path(entry.path().filename()).u8string();
-
-		path3 = path(entry.path().extension()).u8string();
-
+		path2 = /*path(entry.path().filename()).u8string();*/entry.path().filename().string();
+		path3 = /*path(entry.path().extension().string()).u8string();*/entry.path().filename().string();
 		valorpeso = file_size(entry.path());
 		Book* name = new Book(path2, valorpeso, path3, asctime(localtime(&cftime)));
 		nameTree->add(name);

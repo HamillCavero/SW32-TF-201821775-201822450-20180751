@@ -124,6 +124,10 @@ public:
 	int size() {
 		return len;
 	}
+	void eliminar() 
+	{
+		destroy(root);
+	}
 	void add(T elem) {
 		root = add(root, elem);
 	}
