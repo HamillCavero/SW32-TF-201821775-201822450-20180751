@@ -24,8 +24,8 @@ class Book {
 	string extension; // good reads
 	string timeupdate;
 public:
-	Book(string name,string nameFirst, string nameInv, int year, string score, string timeupdate)
-		: name(name),nameFirst(nameFirst), nameInv(nameInv), size(year), extension(score), timeupdate(timeupdate) {}
+	Book(string name,string nameFirst, string nameInv, int peso, string exte, string timeupdate)
+		: name(name),nameFirst(nameFirst), nameInv(nameInv), size(peso), extension(exte), timeupdate(timeupdate) {}
 
 	string getName() { return name; }
 	string getNameFirst() { return nameFirst; }
@@ -68,27 +68,34 @@ void llenararbol2(string ruta, string path2, string nameFirst, string path3, str
 {
 	auto ftime = last_write_time(ruta);
 	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
-	for (const auto & entry : directory_iterator(ruta)) {
+	for (const auto & entry : recursive_directory_iterator(ruta)) {
+		if (is_regular_file(entry.path())) {
+			ftime = last_write_time(entry.path());
 
-		ftime = last_write_time(entry.path());
+			cftime = decltype(ftime)::clock::to_time_t(ftime);
+			/*path2 = entry.path().stem().string()*/
 
-		cftime = decltype(ftime)::clock::to_time_t(ftime);
-
-		path2 = entry.path().stem().string();
-		path3 = entry.path().extension().string();
-		valorpeso = file_size(entry.path());
-		path4 = path2;
-		path4 = reverseStr(path4);
-		path4 = primercaracter(path4);
-		nameFirst = path2;
-		nameFirst = primercaracter(nameFirst);
-		Book* name = new Book(path2,nameFirst, path4, valorpeso, path3, asctime(localtime(&cftime)));
-		names->add(name);
-		namesFirst->add(name);
-		namesInv->add(name);
-		size->add(name);
-		extension->add(name);
-		hora->add(name);
+			path2 = entry.path().filename().string();
+			/*string auxname;
+			istringstream iss(entry.path().filename().string());
+			getline(iss, auxname, '.');
+			path2 = auxname;*/
+			
+			path3 = entry.path().extension().string();
+			valorpeso = file_size(entry.path());
+			path4 = path2;
+			path4 = reverseStr(path4);
+			path4 = primercaracter(path4);
+			nameFirst = path2;
+			nameFirst = primercaracter(nameFirst);
+			Book* name = new Book(path2, nameFirst, path4, valorpeso, path3, asctime(localtime(&cftime)));
+			names->add(name);
+			namesFirst->add(name);
+			namesInv->add(name);
+			size->add(name);
+			extension->add(name);
+			hora->add(name);
+		}
 	}
 }
 
@@ -102,6 +109,7 @@ int main()
 	int pesoporusuario = 0;
 	int orden=0;
 	int selección = 0;
+	int valor = 0;
 	string ruta = "";
 	/*string str = "kkdeprro";*/
 	string reversename = "";
@@ -135,9 +143,9 @@ int main()
 		if (a != nullptr)
 		{
 			cout << "{"
-				<< a->getName() << ","
-				<< a->getSize() << ","
-				<< a->getExtension() << ","
+				<< a->getName() << " ||\t"
+				<< a->getSize() << " ||\t"
+				<< a->getExtension() << " ||\t"
 				<< a->getTimeUpdate() << "\n";
 		}
 		else 
@@ -211,18 +219,33 @@ int main()
 		break;
 		case 2:
 		{
-			cout << "Nombre archivo:" << endl;
-			nameTree->inorder(prnt);
-			cout << "-----------------------==\n";
-			cout << "Peso archivo:" << endl;
-			sizeTree->inorder(prnt);
-			cout << "-----------------------==\n";
-			cout << "Extensión:" << endl;
-			extensionTree->inorder(prnt);
-			cout << "-----------------------==\n";
-			cout << "Time Update: " << endl;
-			cout << "-----------------------==\n";
-			time->inorder(prnt);
+			cout << "Ingrese la forma de visualizar los archivos:" << endl;
+			cout << "1 = Name , 2 = Peso , 3 = extension, 4 = tiempo" << endl;
+			cin >> valor;
+			switch (valor)
+			{
+			case 1:
+				cout << "Nombre archivo:" << endl;
+				nameTree->inorder(prnt);
+				cout << "-----------------------==\n";
+				break;
+			case 2:
+				cout << "Peso archivo:" << endl;
+				sizeTree->inorder(prnt);
+				break;
+			case 3:
+				cout << "Extensión:" << endl;
+				extensionTree->inorder(prnt);
+				cout << "-----------------------==\n";
+				break;
+			case 4:
+				cout << "Time Update: " << endl;
+				cout << "-----------------------==\n";
+				time->inorder(prnt);
+			default:
+				cout << "Ingrese una opción correcta: "; cin >> valor;
+				break;
+			}
 
 			system("pause>0");
 			system("cls");
@@ -262,18 +285,9 @@ int main()
 			break;
 
 		}
+		system("pause>0");
 		system("cls");
 		Menu2(opc);
-		}
-		break;
-		case 4:
-		{
-			cout << "Nombres Inversos: " << endl;
-			nameTreeFirst->inorder(prnt3);
-			cout << "-----------------------==\n";
-			system("pause>0");
-			system("cls");
-			Menu2(opc);
 		}
 		break;
 		case 5:
@@ -292,6 +306,8 @@ int main()
 		default:
 			break;
 		}
+		system("pause>0");
+		system("cls");
 		Menu2(opc);
 		break;
 		case 6:
@@ -299,6 +315,7 @@ int main()
 			cout << "Ingrese el nombre de busqueda: "; cin >> valorUserInputSTR;
 			cout << "Ingrese el peso del archivo:"; cin >> pesoporusuario;
 			sizeTree->find2(pesoporusuario, prntcontiene);
+			system("cls");
 			Menu2(opc);
 		}
 		case 7:
@@ -354,42 +371,6 @@ int main()
 		}
 	}
 	
-	//if (opc == 2)
-	//{
-	//	cout << "Nombre archivo:" << endl;
-	//	nameTree->inorder(prnt);
-	//	cout << "-----------------------==\n";
-	//	cout << "Peso archivo:" << endl;
-	//	sizeTree->inorder(prnt);
-	//	cout << "INVERSO:" << endl;
-	//	sizeTree->postorden(prnt);
-	//	cout << "-----------------------==\n";
-	//	cout << "Extensión:" << endl;
-	//	extensionTree->inorder(prnt);
-	//	cout << "-----------------------==\n";
-	//	cout << "Time Update: " << endl;
-	//	cout << "-----------------------==\n";
-	//	time->inorder(prnt);
-	//	
-	//	system("pause>0");
-	//	system("cls");
-	//	opc = 0;
-	//	opciones(opc);
-	//
-	//}
-	/*if (opc == 3)
-	{
-		cout << "Ingrese el peso buscado: "; cin >> pesoarchivo;
-		cout << endl;
-		cout << "---------------------------------" << endl;
-		prnt(sizeTree->find(pesoarchivo));
-		cout << "--------------------------";
-		opciones(opc);
-	}
-	*//*if (opc == 8) 
-	{
-		exit(0);
-	}*/
 	delete nameTree;
 	delete nameTreeInv;
 	delete time;
