@@ -47,14 +47,7 @@ typedef AVLTree<Book*, int, nullptr> TreeInt;
 typedef AVLTree<Book*, string, nullptr> TreeFlt;
 typedef AVLTree<Book*, string, nullptr>TreeUpdate;
 
-//void opciones(int &opc) 
-//{
-//	cout << "Opciones apartir de la ruta:" << endl;
-//	cout << "Seleccione (2) para ver todos los archivos encontrados" << endl;
-//	cout << "Seleccione (3) para buscar por peso" << endl;
-//	cout << "Seleccione (8) para salir." << endl;
-//	cin >> opc;
-//}
+
 string reverseStr(string& str)
 {
 	int n = str.length();
@@ -107,9 +100,13 @@ int main()
 #endif
 	int opc = 0;
 	int pesoporusuario = 0;
+	int orden=0;
+	int selección = 0;
 	string ruta = "";
 	/*string str = "kkdeprro";*/
 	string reversename = "";
+	string letrabuscar = "";
+	string nombrebuscar = "";
 	uintmax_t valorpeso = 0;
 	float pesoarchivo = 0.0;
 	Menu(opc);
@@ -171,8 +168,6 @@ int main()
 		{
 			cout << "{"
 				<< a->getName() << ","
-				<< a->getNameFirst() << ","
-				<< a->getNameInv() << ","
 				<< a->getSize() << ","
 				<< a->getExtension() << ","
 				<< a->getTimeUpdate() << "\n";
@@ -193,6 +188,10 @@ int main()
 				<< a->getTimeUpdate() << " | "
 				<< a->getSize() << " bytes | ";
 		}
+		else 
+		{
+			cout << "Not found \n";
+		}
 	};
 
 	while (true)
@@ -206,7 +205,7 @@ int main()
 			path2 = ruta;
 			path3 = ruta;
 			system("cls");
-			llenararbol2(ruta, path2, nameFirst, path3,path4, nameTree,nameTreeFirst,nameTreeInv, sizeTree, extensionTree, time, valorpeso);
+			llenararbol2(ruta, path2, nameFirst, path3, path4, nameTree, nameTreeFirst, nameTreeInv, sizeTree, extensionTree, time, valorpeso);
 			Menu2(opc);
 		}
 		break;
@@ -217,8 +216,6 @@ int main()
 			cout << "-----------------------==\n";
 			cout << "Peso archivo:" << endl;
 			sizeTree->inorder(prnt);
-			cout << "INVERSO:" << endl;
-			sizeTree->postorden(prnt);
 			cout << "-----------------------==\n";
 			cout << "Extensión:" << endl;
 			extensionTree->inorder(prnt);
@@ -233,16 +230,40 @@ int main()
 		}
 		break;
 		case 3:
+		{ int selec = 0;
+		cout << "Ingrese por que caracteristica desea buscar:" << endl;
+		cout << "1 =Name , 2=Peso , 3= extension" << endl;
+		cin >> selec;
+		switch (selec)
 		{
+		case 2:
 			cout << "Ingrese el peso buscado: "; cin >> pesoarchivo;
 			cout << endl;
 			cout << "---------------------------------" << endl;
 			prnt(sizeTree->find(pesoarchivo));
-			cout << "--------------------------";
-			system("pause>0");
-			system("cls");
-			Menu2(opc);
+			cout << "--------------------------" << endl;
+			break;
+		case 3:
+			cout << "Ingrese la extensión a buscar: "; cin >> nombrebuscar;
+			cout << endl;
+			cout << "---------------------------------" << endl;
+			prnt(extensionTree->find(nombrebuscar));
+			cout << "--------------------------" << endl;
+			break;
+		case 1:
+			cout << "Ingrese el nombre a buscar: "; cin >> nombrebuscar;
+			cout << endl;
+			cout << "---------------------------------" << endl;
+			prnt(nameTree->find(nombrebuscar));
+			cout << "--------------------------" << endl;
+			break;
+		default:
+			cout << "Ingrese otro valor:";
+			break;
 
+		}
+		system("cls");
+		Menu2(opc);
 		}
 		break;
 		case 4:
@@ -255,13 +276,72 @@ int main()
 			Menu2(opc);
 		}
 		break;
-		case 6: 
+		case 5:
+		{
+		cout << "Ingrese busqueda por primera letra(1) o última letra(0): "; cin >> selección;
+		switch (selección)
+		{
+		case 1:
+			cout << "Ingrese la primera letra para buscar: " << endl; cin >> letrabuscar;
+			prnt(nameTreeFirst->find(letrabuscar));
+			break;
+		case 0:
+			cout << "Ingrese la ultima letra para buscar: " << endl; cin >> letrabuscar;
+			prnt(nameTreeInv->find(letrabuscar));
+			break;
+		default:
+			break;
+		}
+		Menu2(opc);
+		break;
+		case 6:
 		{
 			cout << "Ingrese el nombre de busqueda: "; cin >> valorUserInputSTR;
 			cout << "Ingrese el peso del archivo:"; cin >> pesoporusuario;
 			sizeTree->find2(pesoporusuario, prntcontiene);
+			Menu2(opc);
 		}
-		break;
+		case 7:
+			cout << "Ingrese (1)Ascendente o (0) Descendente: "; cin >> orden;
+			switch (orden)
+			{
+			case 1:
+				cout << "Nombre archivo:" << endl;
+				nameTree->inorder(prnt);
+				cout << "-----------------------==\n";
+				cout << "Peso archivo:" << endl;
+				sizeTree->inorder(prnt);
+				cout << "-----------------------==\n";
+				cout << "Extensión:" << endl;
+				extensionTree->inorder(prnt);
+				cout << "-----------------------==\n";
+				cout << "Time Update: " << endl;
+				cout << "-----------------------==\n";
+				time->inorder(prnt);
+				break;
+			case 0:
+				cout << "Nombre archivo:" << endl;
+				nameTree->postorden(prnt);
+				cout << "-----------------------==\n";
+				cout << "Peso archivo:" << endl;
+				sizeTree->postorden(prnt);
+				cout << "-----------------------==\n";
+				cout << "Extensión:" << endl;
+				extensionTree->postorden(prnt);
+				cout << "-----------------------==\n";
+				cout << "Time Update: " << endl;
+				cout << "-----------------------==\n";
+				time->postorden(prnt);
+				break;
+
+			default:
+				cout << "Ingrese otro valor para orden:";
+				cin >> orden;
+				break;
+			}
+			system("cls");
+			Menu2(opc);
+			break;
 		case 8:
 		{
 			exit(0);
@@ -271,8 +351,8 @@ int main()
 			cout << "Opcion incorrecta:";
 			break;
 		}
+		}
 	}
-
 	
 	//if (opc == 2)
 	//{

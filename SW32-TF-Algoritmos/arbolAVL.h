@@ -46,8 +46,10 @@ class AVLTree {
 		}
 		return node;
 	}
-	T find(Node* node, Comparable val) {
-		if (node == nullptr) {
+	T find(Node* node, Comparable val)
+	{
+		if (node == nullptr) 
+		{
 			return NONE;
 		}
 		else if (val == key(node->elem)) {
@@ -56,7 +58,8 @@ class AVLTree {
 		else if (val < key(node->elem)) {
 			return find(node->left, val);
 		}
-		else {
+		else 
+		{
 			return find(node->right, val);
 		}
 	}
@@ -151,6 +154,10 @@ public:
 	}
 	void find2(Comparable val, function<void(T)> proc) {
 		find2(root, val, proc);
+	}
+	void find3nombre(function<void(T)> proc) 
+	{
+		find3nombre(root, proc);
 	}
 
 	bool remove(Comparable val)
