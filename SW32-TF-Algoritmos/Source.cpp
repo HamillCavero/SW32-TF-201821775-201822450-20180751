@@ -33,6 +33,10 @@ public:
 	void setscore(string score) { this->extension = score; }
 	void setTimeupdate(string update) { this->timeupdate = update; }
 };
+typedef AVLTree<Book*, string, nullptr> TreeStr;
+typedef AVLTree<Book*, int, nullptr> TreeInt;
+typedef AVLTree<Book*, string, nullptr> TreeFlt;
+typedef AVLTree<Book*, string, nullptr>TreeUpdate;
 
 void opciones(int &opc) 
 {
@@ -42,7 +46,26 @@ void opciones(int &opc)
 	cout << "Seleccione (8) para salir." << endl;
 	cin >> opc;
 }
+void llenararbol(string ruta,string path2,string path3,TreeStr* names ,TreeInt* size,TreeFlt* extension ,TreeUpdate* hora,uintmax_t valorpeso)
+{
+	auto ftime = last_write_time(ruta);
+	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
+	for (const auto & entry : directory_iterator(ruta)) {
 
+		ftime = last_write_time(entry.path());
+
+		cftime = decltype(ftime)::clock::to_time_t(ftime);
+
+		path2 = entry.path().stem().string();
+		path3 = entry.path().extension().string();
+		valorpeso = file_size(entry.path());
+		Book* name = new Book(path2, valorpeso, path3, asctime(localtime(&cftime)));
+		names->add(name);
+		size->add(name);
+		extension->add(name);
+		hora->add(name);
+	}
+}
 
 int main()
 {
@@ -51,15 +74,11 @@ int main()
 #pragma warning(push)
 #pragma warning(disable : 4996)
 #endif
-	int opc=0;
-	string ruta="";
-	string ruta2 = "";
+	int opc = 0;
+	string ruta = "";
+	uintmax_t valorpeso = 0;
 	float pesoarchivo=0.0;
 	Menu(opc);
-	typedef AVLTree<Book*, string, nullptr> TreeStr;
-	typedef AVLTree<Book*, int, nullptr> TreeInt;
-	typedef AVLTree<Book*, string, nullptr> TreeFlt;
-	typedef AVLTree<Book*, string, nullptr>TreeUpdate;
 
 	auto l1 = [](Book* a) { return a->getName(); };
 	auto l2 = [](Book* a) { return a->getSize(); };
@@ -73,34 +92,6 @@ int main()
 	string path1 = "";  // . es la careta del programa // investigar c++files system
 	string path2 = "";
 	string path3 = "";
-	if (opc == 1)
-	{
-		cout << "Ingrese la ruta : "; cin >> ruta;
-		path1 = ruta;
-		path2 = ruta;
-		path3 = ruta;
-		system("cls");
-		opciones(opc);
-	}
-
-	uintmax_t valorpeso;
-	auto ftime = last_write_time(ruta);
-	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
-	for (const auto & entry : directory_iterator(path1)) {
-
-		ftime = last_write_time(entry.path());
-
-		cftime = decltype(ftime)::clock::to_time_t(ftime);
-
-		path2 = /*path(entry.path().filename()).u8string();*/entry.path().stem().string();
-		path3 = /*path(entry.path().extension().string()).u8string();*/entry.path().extension().string();
-		valorpeso = file_size(entry.path());
-		Book* name = new Book(path2, valorpeso, path3, asctime(localtime(&cftime)));
-		nameTree->add(name);
-		sizeTree->add(name);
-		extensionTree->add(name);
-		time->add(name);
-	}
 	auto prnt = [](Book* a)
 	{
 
@@ -118,70 +109,115 @@ int main()
 
 		}
 	};
-	if (opc == 2)
+	while (true)
 	{
-		cout << "Nombre archivo:" << endl;
-		nameTree->inorder(prnt);
-		cout << "-----------------------==\n";
-		cout << "Peso archivo:" << endl;
-		sizeTree->inorder(prnt);
-		cout << "INVERSO:" << endl;
-		sizeTree->postorden(prnt);
-		cout << "-----------------------==\n";
-		cout << "Extensión:" << endl;
-		extensionTree->inorder(prnt);
-		cout << "-----------------------==\n";
-		cout << "Time Update: " << endl;
-		cout << "-----------------------==\n";
-		time->inorder(prnt);
-		
-		system("pause>0");
+		switch (opc)
+		{
+		case 1:
+		{
+			cout << "Ingrese la ruta : "; cin >> ruta;
+			path1 = ruta;
+			path2 = ruta;
+			path3 = ruta;
+			system("cls");
+			llenararbol(ruta, path2, path3, nameTree, sizeTree, extensionTree, time, valorpeso);
+			opciones(opc);
+		}
+		break;
+		case 2:
+		{
+			cout << "Nombre archivo:" << endl;
+			nameTree->inorder(prnt);
+			cout << "-----------------------==\n";
+			cout << "Peso archivo:" << endl;
+			sizeTree->inorder(prnt);
+			cout << "INVERSO:" << endl;
+			sizeTree->postorden(prnt);
+			cout << "-----------------------==\n";
+			cout << "Extensión:" << endl;
+			extensionTree->inorder(prnt);
+			cout << "-----------------------==\n";
+			cout << "Time Update: " << endl;
+			cout << "-----------------------==\n";
+			time->inorder(prnt);
+
+			system("pause>0");
+			system("cls");
+			opciones(opc);
+		}
+		break;
+		case 3:
+		{
+			cout << "Ingrese el peso buscado: "; cin >> pesoarchivo;
+			cout << endl;
+			cout << "---------------------------------" << endl;
+			prnt(sizeTree->find(pesoarchivo));
+			cout << "--------------------------";
+			system("cls");
+			opciones(opc);
+
+		}
+		break;
+		case 8:
+		{
+			exit(0);
+		}
+		break;
+		default:
+			cout << "Opcion incorrecta:";
+			break;
+		}
+	}
+	/*if (opc == 1)
+	{
+		cout << "Ingrese la ruta : "; cin >> ruta;
+		path1 = ruta;
+		path2 = ruta;
+		path3 = ruta;
 		system("cls");
 		opciones(opc);
-	}
-	if (opc == 3) 
+	}*/
+	
+	//if (opc == 2)
+	//{
+	//	cout << "Nombre archivo:" << endl;
+	//	nameTree->inorder(prnt);
+	//	cout << "-----------------------==\n";
+	//	cout << "Peso archivo:" << endl;
+	//	sizeTree->inorder(prnt);
+	//	cout << "INVERSO:" << endl;
+	//	sizeTree->postorden(prnt);
+	//	cout << "-----------------------==\n";
+	//	cout << "Extensión:" << endl;
+	//	extensionTree->inorder(prnt);
+	//	cout << "-----------------------==\n";
+	//	cout << "Time Update: " << endl;
+	//	cout << "-----------------------==\n";
+	//	time->inorder(prnt);
+	//	
+	//	system("pause>0");
+	//	system("cls");
+	//	opc = 0;
+	//	opciones(opc);
+	//
+	//}
+	/*if (opc == 3)
 	{
 		cout << "Ingrese el peso buscado: "; cin >> pesoarchivo;
+		cout << endl;
 		cout << "---------------------------------" << endl;
 		prnt(sizeTree->find(pesoarchivo));
 		cout << "--------------------------";
 		opciones(opc);
 	}
-	if (opc == 8) 
+	*//*if (opc == 8) 
 	{
 		exit(0);
-	}
-	
-
-
-
-
-	
-
-
-
-
-	//cout << "Nombre archivo:" << endl;
-	//nameTree->inorder(prnt);
-	//cout << "-----------------------==\n";
-	//cout << "Peso archivo:" << endl;
-	//sizeTree->inorder(prnt);
-	//cout << "-----------------------==\n";
-	//cout << "Extensión:" << endl;
-	//extensionTree->inorder(prnt);
-	//cout << "-----------------------==\n";
-	//cout << "Time Update: " << endl;
-	//cout << "-----------------------==\n";
-	//time->inorder(prnt);
-	//cout << "---------------------" << endl;
-	//prnt(nameTree->find("f.txt"));
-
-	//cout << "---------------" << endl;
-
-	//system("pause>0");
-	//delete nameTree;
-	//delete sizeTree;
-	//delete extensionTree;
+	}*/
+	delete nameTree;
+	delete time;
+	delete sizeTree;
+	delete extensionTree;
 system("pause>0");
 #ifdef _MSC_VER
 #pragma warning(pop)
