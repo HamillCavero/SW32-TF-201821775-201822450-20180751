@@ -125,6 +125,8 @@ int main()
 		cout << "-----------------------==\n";
 		cout << "Peso archivo:" << endl;
 		sizeTree->inorder(prnt);
+		cout << "INVERSO:" << endl;
+		sizeTree->postorden(prnt);
 		cout << "-----------------------==\n";
 		cout << "Extensión:" << endl;
 		extensionTree->inorder(prnt);
@@ -132,6 +134,7 @@ int main()
 		cout << "Time Update: " << endl;
 		cout << "-----------------------==\n";
 		time->inorder(prnt);
+		
 		system("pause>0");
 		system("cls");
 		opciones(opc);

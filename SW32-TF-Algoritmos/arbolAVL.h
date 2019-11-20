@@ -68,7 +68,15 @@ class AVLTree {
 			inorder(node->right, proc);
 		}
 	}
-
+	void postorden(Node* node, function<void(T)> proc) {
+		if (node != nullptr) {
+	
+			postorden(node->right, proc);
+			proc(node->elem);
+			postorden(node->left, proc);
+	
+		}
+	}
 
 	// BALANCEO!
 	int height(Node* node) { return node == nullptr ? -1 : node->h; }
@@ -179,5 +187,8 @@ public:
 	{
 		inorder(root, proc);
 	}
-
+	void postorden(function<void(T)> proc) 
+	{
+		postorden(root, proc);
+	}
 };
