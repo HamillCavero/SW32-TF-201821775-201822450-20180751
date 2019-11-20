@@ -10,6 +10,7 @@
 #include<vector>
 #include <string>
 #include "Menu.h"
+#include <cstdlib>
 using namespace std;
 using namespace std::experimental::filesystem;
 namespace fs = std::experimental::filesystem;
@@ -23,10 +24,6 @@ class Book {
 	string extension; // good reads
 	string timeupdate;
 public:
-	/*Book(string name, int year, string score, string timeupdate)
-		: name(name), size(year), extension(score), timeupdate(timeupdate) {}*/
-	/*Book(string name,string nameInv ,int year, string score, string timeupdate)
-		: name(name),nameInv(nameInv), size(year), extension(score), timeupdate(timeupdate) {}*/
 	Book(string name,string nameFirst, string nameInv, int year, string score, string timeupdate)
 		: name(name),nameFirst(nameFirst), nameInv(nameInv), size(year), extension(score), timeupdate(timeupdate) {}
 
@@ -50,14 +47,14 @@ typedef AVLTree<Book*, int, nullptr> TreeInt;
 typedef AVLTree<Book*, string, nullptr> TreeFlt;
 typedef AVLTree<Book*, string, nullptr>TreeUpdate;
 
-void opciones(int &opc) 
-{
-	cout << "Opciones apartir de la ruta:" << endl;
-	cout << "Seleccione (2) para ver todos los archivos encontrados" << endl;
-	cout << "Seleccione (3) para buscar por peso" << endl;
-	cout << "Seleccione (8) para salir." << endl;
-	cin >> opc;
-}
+//void opciones(int &opc) 
+//{
+//	cout << "Opciones apartir de la ruta:" << endl;
+//	cout << "Seleccione (2) para ver todos los archivos encontrados" << endl;
+//	cout << "Seleccione (3) para buscar por peso" << endl;
+//	cout << "Seleccione (8) para salir." << endl;
+//	cin >> opc;
+//}
 string reverseStr(string& str)
 {
 	int n = str.length();
@@ -69,56 +66,10 @@ string reverseStr(string& str)
 }
 string primercaracter(string &str) 
 {
-
-	str = str.front();
+   str = str.front();
 	return str;
 
 }
-//void llenararbol(string ruta,string path2,string path3,TreeStr* names ,TreeInt* size,TreeFlt* extension ,TreeUpdate* hora,uintmax_t valorpeso)
-//{
-//	auto ftime = last_write_time(ruta);
-//	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
-//	for (const auto & entry : directory_iterator(ruta)) {
-//
-//		ftime = last_write_time(entry.path());
-//
-//		cftime = decltype(ftime)::clock::to_time_t(ftime);
-//
-//		path2 = entry.path().stem().string();
-//		path3 = entry.path().extension().string();
-//		valorpeso = file_size(entry.path());
-//		Book* name = new Book(path2, valorpeso, path3, asctime(localtime(&cftime)));
-//		names->add(name);
-//		size->add(name);
-//		extension->add(name);
-//		hora->add(name);
-//	}
-//}
-
-//void llenararbol2(string ruta, string path2, string path3,string path4, TreeStr* names, TreeStrInv* namesInv, TreeInt* size, TreeFlt* extension, TreeUpdate* hora, uintmax_t valorpeso)
-//{
-//	auto ftime = last_write_time(ruta);
-//	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
-//	for (const auto & entry : directory_iterator(ruta)) {
-//
-//		ftime = last_write_time(entry.path());
-//
-//		cftime = decltype(ftime)::clock::to_time_t(ftime);
-//
-//		path2 = entry.path().stem().string();
-//		path3 = entry.path().extension().string();
-//		valorpeso = file_size(entry.path());
-//		path4 = path2;
-//		path4=reverseStr(path4);
-//		path4 = primercaracter(path4);
-//		Book* name = new Book(path2,path4, valorpeso, path3, asctime(localtime(&cftime)));
-//		names->add(name);
-//		namesInv->add(name);
-//		size->add(name);
-//		extension->add(name);
-//		hora->add(name);
-//	}
-//}
 
 void llenararbol2(string ruta, string path2, string nameFirst, string path3, string path4, TreeStr* names, TreeStrFirst* namesFirst, TreeStrInv* namesInv, TreeInt* size, TreeFlt* extension, TreeUpdate* hora, uintmax_t valorpeso)
 {
@@ -150,17 +101,17 @@ void llenararbol2(string ruta, string path2, string nameFirst, string path3, str
 
 int main()
 {
-	/*inicializar();*/
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4996)
 #endif
 	int opc = 0;
+	int pesoporusuario = 0;
 	string ruta = "";
 	/*string str = "kkdeprro";*/
 	string reversename = "";
 	uintmax_t valorpeso = 0;
-	float pesoarchivo=0.0;
+	float pesoarchivo = 0.0;
 	Menu(opc);
 	auto l1 = [](Book* a) { return a->getName(); };
 	auto l12 = [](Book* a) { return a->getNameFirst(); };
@@ -180,6 +131,7 @@ int main()
 	string path3 = "";
 	string path4 = "";
 	string nameFirst = "";
+	string valorUserInputSTR = "";
 	auto prnt = [](Book* a)
 	{
 
@@ -190,11 +142,10 @@ int main()
 				<< a->getSize() << ","
 				<< a->getExtension() << ","
 				<< a->getTimeUpdate() << "\n";
-
 		}
-		else {
+		else 
+		{
 			cout << "Not found\n";
-
 		}
 	};
 	auto prnt2 = [](Book* a)
@@ -211,7 +162,6 @@ int main()
 		}
 		else {
 			cout << "Not found\n";
-
 		}
 	};
 	auto prnt3 = [](Book* a)
@@ -221,18 +171,30 @@ int main()
 		{
 			cout << "{"
 				<< a->getName() << ","
-				<<a->getNameFirst()<<","
-				<<a->getNameInv()<<","
+				<< a->getNameFirst() << ","
+				<< a->getNameInv() << ","
 				<< a->getSize() << ","
 				<< a->getExtension() << ","
 				<< a->getTimeUpdate() << "\n";
 
 		}
-		else {
+		else
+		{
 			cout << "Not found\n";
-
 		}
 	};
+	auto prntcontiene = [valorUserInputSTR](Book *a)
+	{
+		if (a->getName().find(valorUserInputSTR) != string::npos)
+		{
+			cout << "{ "
+				<< a->getName() << " | "
+				<< a->getExtension() << " | "
+				<< a->getTimeUpdate() << " | "
+				<< a->getSize() << " bytes | ";
+		}
+	};
+
 	while (true)
 	{
 		switch (opc)
@@ -244,10 +206,8 @@ int main()
 			path2 = ruta;
 			path3 = ruta;
 			system("cls");
-			//llenararbol(ruta, path2, path3, nameTree, sizeTree, extensionTree, time, valorpeso);
 			llenararbol2(ruta, path2, nameFirst, path3,path4, nameTree,nameTreeFirst,nameTreeInv, sizeTree, extensionTree, time, valorpeso);
-
-			opciones(opc);
+			Menu2(opc);
 		}
 		break;
 		case 2:
@@ -269,7 +229,7 @@ int main()
 
 			system("pause>0");
 			system("cls");
-			opciones(opc);
+			Menu2(opc);
 		}
 		break;
 		case 3:
@@ -281,19 +241,25 @@ int main()
 			cout << "--------------------------";
 			system("pause>0");
 			system("cls");
-			opciones(opc);
+			Menu2(opc);
 
 		}
 		break;
 		case 4:
 		{
-			//llenararbol2(ruta, path2, path3,path4, nameTree, sizeTree, extensionTree, time, valorpeso);
 			cout << "Nombres Inversos: " << endl;
 			nameTreeFirst->inorder(prnt3);
 			cout << "-----------------------==\n";
 			system("pause>0");
 			system("cls");
-			opciones(opc);
+			Menu2(opc);
+		}
+		break;
+		case 6: 
+		{
+			cout << "Ingrese el nombre de busqueda: "; cin >> valorUserInputSTR;
+			cout << "Ingrese el peso del archivo:"; cin >> pesoporusuario;
+			sizeTree->find2(pesoporusuario, prntcontiene);
 		}
 		break;
 		case 8:
@@ -306,15 +272,7 @@ int main()
 			break;
 		}
 	}
-	/*if (opc == 1)
-	{
-		cout << "Ingrese la ruta : "; cin >> ruta;
-		path1 = ruta;
-		path2 = ruta;
-		path3 = ruta;
-		system("cls");
-		opciones(opc);
-	}*/
+
 	
 	//if (opc == 2)
 	//{

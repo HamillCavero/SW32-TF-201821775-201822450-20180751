@@ -123,6 +123,16 @@ class AVLTree {
 		}
 		return node;
 	}
+	void find2(Node* node, Comparable val, function<void(T)> proc) {
+		if (node != nullptr) {
+			find2(node->left, val, proc);
+			if (val == key(node->elem)) {
+				proc(node->elem);
+			}
+			find2(node->right, val, proc);
+		}
+
+	}
 public:
 	AVLTree(function<Comparable(T)> key = [](T a) {return a; })
 		: root(nullptr), len(0), key(key) {}
@@ -139,6 +149,10 @@ public:
 	void add(T elem) {
 		root = add(root, elem);
 	}
+	void find2(Comparable val, function<void(T)> proc) {
+		find2(root, val, proc);
+	}
+
 	bool remove(Comparable val)
 	{
 		// Encontrar el nodo con elemento a eliminar
