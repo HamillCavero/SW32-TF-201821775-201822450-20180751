@@ -208,7 +208,7 @@ int main()
 		{
 		case 1:
 		{
-			cout << "Ingrese la ruta : "; cin >> ruta;
+			cout << "Ingrese la ruta : "; cin.get(); getline(cin, ruta);
 			path1 = ruta;
 			path2 = ruta;
 			path3 = ruta;
