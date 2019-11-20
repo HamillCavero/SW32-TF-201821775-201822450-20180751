@@ -6,32 +6,31 @@
 
 using namespace std;
 
-void Menu(int opc) {
-	string ruta;
-	while (opc == 0) {
-		cout << "------------------Menu-----------------" << endl;
-		cout << "----1. Agregue una ruta----------------" << endl;
-		cout << "----2. Salir---------------------------" << endl;
-		cout << "Ingrese una opción: " << endl;
-		cin >> opc;
+void Menu(int &opc) {
+	
+	while (opc == 0) 
+	{
+		cout << "\n\n\t\t\t\t      " << char(201) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(187) << endl;
+		cout << "\t\t\t\t      " << char(186) << "\t\t\t\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "\t\t       MENU\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "\t\t\t\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "    1. Ingrese ruta:\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "    2. Mostrar Archivos Encontrados\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "    3. Filtrar Archivos\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "    4. Ordenar Archivos\t\t    " << char(186) << endl;
+		cout << "\t\t\t\t      " << char(186) << "    5. Salir           \t\t    " << char(186) << endl;
 
-		switch (opc)
-		{
+		cout << "\t\t\t\t      " << char(186) << "\t\t\t\t\t    " << char(186);
+		cout << "\n\t\t\t\t      " << char(200) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(205) << char(188) << endl;
 
-		case 1:
-			cout << "Ingrese ruta";
-			cin >> ruta;
-			break;
-		case 2:
-			exit(0);
-			break;
-		default:
-			cout << "Ingresa otra opcion papanatas";  
-			break;
-		}
+		do {
+			
+			cout << "ELIJA UNA OPCION: ";
+			cin >> opc;
+		} while (!(opc >= 1 && opc <= 5));
+	
+		system("cls");
 	}
-
 }
-
 
 

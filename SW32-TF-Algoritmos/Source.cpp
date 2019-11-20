@@ -9,10 +9,12 @@
 #include<Windows.h>
 #include<vector>
 #include <string>
+#include "Menu.h"
 using namespace std;
 using namespace std::experimental::filesystem;
 namespace fs = std::experimental::filesystem;
 using namespace std::chrono_literals;
+
 class Book {
 	string name;
 	int size;
@@ -32,21 +34,27 @@ public:
 	void setTimeupdate(string update) { this->timeupdate = update; }
 };
 
-//string rndStr() 
-//{
-//	int n = 10 + rand() % 21;
-//	stringstream ss;
-//	for (int i = 0; i < n; ++i) {
-//		ss << (char)('a' + rand() % 27);
-//	}
-//	return ss.str();
-//}
+void opciones(int &opc) 
+{
+	cout << "Opciones apartir de la ruta:" << endl;
+	cout << "Seleccione (2) para ver todos los archivos encontrados" << endl;
+	cout << "Seleccione (3) para buscar por peso" << endl;
+	cout << "Seleccione (8) para salir." << endl;
 
-int main() {
+	cin >> opc;
+}
+
+int main()
+{
+	/*inicializar();*/
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4996)
 #endif
+	int opc=0;
+	string ruta="";
+	float pesoarchivo=0.0;
+	Menu(opc);
 	typedef AVLTree<Book*, string, nullptr> TreeStr;
 	typedef AVLTree<Book*, int, nullptr> TreeInt;
 	typedef AVLTree<Book*, string, nullptr> TreeFlt;
@@ -61,23 +69,23 @@ int main() {
 	TreeFlt* extensionTree = new TreeFlt(l3);
 	TreeUpdate* time = new TreeUpdate(l4);
 
-	auto ftime = last_write_time("C:\\Users\\Aldo\\Desktop\\Carpetade Prueba");
-	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
-
+	string path1 = "";  // . es la careta del programa // investigar c++files system
+	string path2 = "";
+	string path3 = "";
+	if (opc == 1)
+	{
+		cout << "Ingrese la ruta : "; cin >> ruta;
+		path1 = ruta;
+		path2 = ruta;
+		path3 = ruta;
+		system("cls");
+		opciones(opc);
+	}
 	uintmax_t valorpeso;
-	string path1 = "C:\\Users\\Aldo\\Desktop\\Carpetade Prueba";  // . es la careta del programa // investigar c++files system
-	string path2 = "C:\\Users\\Aldo\\Desktop\\Carpetade Prueba";
-	string path3 = "C:\\Users\\Aldo\\Desktop\\Carpetade Prueba";
-	
+	auto ftime = last_write_time(ruta);
+	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
 	for (const auto & entry : directory_iterator(path1)) {
-		//cout << entry.path() << endl;
 
-		/*cout << path(entry.path()).filename() << endl;
-
-		cout << file_size(entry.path()) << endl;
-
-		cout << path(entry.path()).extension() << endl;
-		*/
 		ftime = last_write_time(entry.path());
 
 		cftime = decltype(ftime)::clock::to_time_t(ftime);
@@ -110,42 +118,68 @@ int main() {
 
 		}
 	};
-	cout << "Nombre archivo:" << endl;
-	nameTree->inorder(prnt);
-	cout << "-----------------------==\n";
-	cout << "Peso archivo:" << endl;
-	sizeTree->inorder(prnt);
-	cout << "-----------------------==\n";
-	cout << "Extensión:" << endl;
-	extensionTree->inorder(prnt);
-	cout << "-----------------------==\n";
-	cout << "Time Update: " << endl;
-	cout << "-----------------------==\n";
-	time->inorder(prnt);
-	//cout << "ff"<<endl;
-	//nameTree->innorden();
-	cout << "---------------------" << endl;
-	prnt(nameTree->find("f.txt"));
-	/*prnt(sizeTree->find(2011));*/
-	//prnt(scoreTree->find(4.5));
-	cout << "---------------" << endl;
-	/*string nombre;
-	while (true)
+	if (opc == 2)
 	{
-
-	cout << "Ingrese el nombre del archivo a buscar:" << endl; cin >> nombre;
-	cout << "Buscando Archivo:" << endl;
-	if (prnt(nameTree->find(nombre)) == true)
-	{
-	break;
+		cout << "Nombre archivo:" << endl;
+		nameTree->inorder(prnt);
+		cout << "-----------------------==\n";
+		cout << "Peso archivo:" << endl;
+		sizeTree->inorder(prnt);
+		cout << "-----------------------==\n";
+		cout << "Extensión:" << endl;
+		extensionTree->inorder(prnt);
+		cout << "-----------------------==\n";
+		cout << "Time Update: " << endl;
+		cout << "-----------------------==\n";
+		time->inorder(prnt);
+		system("pause>0");
+		system("cls");
+		opciones(opc);
 	}
-	};*/
+	if (opc == 3) 
+	{
+		cout << "Ingrese el peso buscado: "; cin >> pesoarchivo;
+		cout << "---------------------------------" << endl;
+		prnt(sizeTree->find(pesoarchivo));
+		cout << "--------------------------";
+		opciones(opc);
+	}
+	if (opc == 8) 
+	{
+		exit(0);
+	}
+	
 
 
-	system("pause>0");
-	delete nameTree;
-	delete sizeTree;
-	delete extensionTree;
+
+
+	
+
+
+
+
+	//cout << "Nombre archivo:" << endl;
+	//nameTree->inorder(prnt);
+	//cout << "-----------------------==\n";
+	//cout << "Peso archivo:" << endl;
+	//sizeTree->inorder(prnt);
+	//cout << "-----------------------==\n";
+	//cout << "Extensión:" << endl;
+	//extensionTree->inorder(prnt);
+	//cout << "-----------------------==\n";
+	//cout << "Time Update: " << endl;
+	//cout << "-----------------------==\n";
+	//time->inorder(prnt);
+	//cout << "---------------------" << endl;
+	//prnt(nameTree->find("f.txt"));
+
+	//cout << "---------------" << endl;
+
+	//system("pause>0");
+	//delete nameTree;
+	//delete sizeTree;
+	//delete extensionTree;
+system("pause>0");
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
