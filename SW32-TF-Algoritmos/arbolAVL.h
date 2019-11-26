@@ -52,10 +52,14 @@ class AVLTree {
 		{
 			return NONE;
 		}
-		else if (val == key(node->elem)) {
+		else if (val == key(node->elem)) 
+		{
 			return node->elem;
+		/*	return find(node->left, val);
+			return find(node->right, val);*/
 		}
-		else if (val < key(node->elem)) {
+		else if (val < key(node->elem)) 
+		{
 			return find(node->left, val);
 		}
 		else 
@@ -127,14 +131,28 @@ class AVLTree {
 		return node;
 	}
 	void find2(Node* node, Comparable val, function<void(T)> proc) {
-		if (node != nullptr) {
-			find2(node->left, val, proc);
-			if (val == key(node->elem)) {
+		if (node == nullptr)
+		{
+
+		}
+		else	if (val == key(node->elem))		{
 				proc(node->elem);
+				if (node->h >= 1)
+				{
+					find2(node->left, val, proc);
+					find2(node->right, val, proc);
+				}
 			}
+
+		else if (val < key(node->elem))
+		{
+			find2(node->left, val, proc);
+		}
+		else 
+		{
 			find2(node->right, val, proc);
 		}
-
+		
 	}
 public:
 	AVLTree(function<Comparable(T)> key = [](T a) {return a; })
@@ -169,7 +187,8 @@ public:
 		while (aux != nullptr) {
 			if (val == key(aux->elem)) break;
 			parent = aux;
-			if (val < key(aux->elem)) {
+			if (val < key(aux->elem))
+			{
 				left = true;
 				aux = aux->left;
 			}
@@ -187,7 +206,8 @@ public:
 		}
 		else {
 			Node* aux2 = aux->left;
-			while (aux2->right != nullptr) {
+			while (aux2->right != nullptr) 
+			{
 				parent = aux2;
 				aux2 = aux2->right;
 			}

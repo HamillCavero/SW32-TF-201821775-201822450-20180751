@@ -64,7 +64,7 @@ string primercaracter(string &str)
 
 }
 
-void llenararbol2(string ruta, string path2, string nameFirst, string path3, string path4, TreeStr* names, TreeStrFirst* namesFirst, TreeStrInv* namesInv, TreeInt* size, TreeFlt* extension, TreeUpdate* hora, uintmax_t valorpeso)
+void llenararbol2(string ruta, string path2, string nameFirst, string path3, string path4, TreeStr* names, TreeStrFirst* namesFirst, TreeStrInv* namesInv, TreeInt* size, TreeFlt* extension, TreeUpdate* hora, uintmax_t valorpeso,int &canti)
 {
 	auto ftime = last_write_time(ruta);
 	std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system_clock
@@ -73,7 +73,7 @@ void llenararbol2(string ruta, string path2, string nameFirst, string path3, str
 			ftime = last_write_time(entry.path());
 
 			cftime = decltype(ftime)::clock::to_time_t(ftime);
-	
+			canti++;
 			path2 = entry.path().filename().string();
 			path3 = entry.path().extension().string();
 			valorpeso = file_size(entry.path());
@@ -104,6 +104,7 @@ int main()
 	int orden=0;
 	int selección = 0;
 	int valor = 0;
+	int cantiarchivosleido=0;
 	string ruta = "";
 	string reversename = "";
 	string letrabuscar = "";
@@ -206,7 +207,7 @@ int main()
 			path2 = ruta;
 			path3 = ruta;
 			system("cls");
-			llenararbol2(ruta, path2, nameFirst, path3, path4, nameTree, nameTreeFirst, nameTreeInv, sizeTree, extensionTree, time, valorpeso);
+			llenararbol2(ruta, path2, nameFirst, path3, path4, nameTree, nameTreeFirst, nameTreeInv, sizeTree, extensionTree, time, valorpeso,cantiarchivosleido);
 			Menu2(opc);
 		}
 		break;
@@ -221,6 +222,7 @@ int main()
 				cout << "Nombre archivo:" << endl;
 				nameTree->inorder(prnt);
 				cout << "-----------------------==\n";
+				cout << "Cantidad archivos leidos: \t"; cout << cantiarchivosleido << endl;
 				break;
 			case 2:
 				cout << "Peso archivo:" << endl;
@@ -270,7 +272,7 @@ int main()
 			cout << "Ingrese el nombre a buscar: "; cin >> nombrebuscar;
 			cout << endl;
 			cout << "---------------------------------" << endl;
-			prnt(nameTree->find(nombrebuscar));
+			/*prnt(*/nameTree->find2(nombrebuscar,prntcontiene);
 			cout << "--------------------------" << endl;
 			break;
 		default:
@@ -285,15 +287,18 @@ int main()
 		break;
 		case 5:
 		{
-		cout << "Ingrese busqueda por primera letra(1) o última letra(0): "; cin >> selección;
+		cout << "Ingrese busqueda por primera letra(1) o ultima letra(0): "; cin >> selección;
 		switch (selección)
 		{
 		case 1:
-			cout << "Ingrese la primera letra para buscar: " << endl; cin >> letrabuscar;
-			prnt(nameTreeFirst->find(letrabuscar));
+			cout << "Ingrese la primera letra para buscar: " << endl;
+			cin >> letrabuscar;
+			nameTreeFirst->find2(letrabuscar, prnt);
+		/*	prnt(nameTreeFirst->find(letrabuscar));*/
 			break;
 		case 0:
-			cout << "Ingrese la ultima letra para buscar: " << endl; cin >> letrabuscar;
+			cout << "Ingrese la ultima letra para buscar: " << endl; 
+			cin >> letrabuscar;
 			prnt(nameTreeInv->find(letrabuscar));
 			break;
 		default:
@@ -308,6 +313,7 @@ int main()
 			cout << "Ingrese el nombre de busqueda: "; cin >> valorUserInputSTR;
 			cout << "Ingrese el peso del archivo:"; cin >> pesoporusuario;
 			sizeTree->find2(pesoporusuario, prntcontiene);
+			system("pause>0");
 			system("cls");
 			Menu2(opc);
 		}
@@ -328,6 +334,7 @@ int main()
 				cout << "Time Update: " << endl;
 				cout << "-----------------------==\n";
 				time->inorder(prnt);
+				system("pause>0");
 				break;
 			case 0:
 				cout << "Nombre archivo:" << endl;
@@ -342,6 +349,7 @@ int main()
 				cout << "Time Update: " << endl;
 				cout << "-----------------------==\n";
 				time->postorden(prnt);
+				system("pause>0");
 				break;
 
 			default:
